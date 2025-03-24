@@ -1,11 +1,9 @@
-package com.akeb.exo1;
+package com.akeb.exo2;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import com.akeb.exo2.Stack;
 
 public class StackTest {
     
