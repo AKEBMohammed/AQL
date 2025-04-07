@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.akeb.TP0.exo4.Prime;
-
 public class PrimeTest {
 
     @ParameterizedTest

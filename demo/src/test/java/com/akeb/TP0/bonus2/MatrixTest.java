@@ -3,8 +3,6 @@ package com.akeb.TP0.bonus2;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.akeb.TP0.bonus2.Matrix;
-
 import org.junit.jupiter.api.DisplayName;
 
 public class MatrixTest {
