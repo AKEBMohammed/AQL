@@ -44,3 +44,18 @@ The loop condition is `i <= s1.length()`, which will cause an `ArrayIndexOutOfBo
 3. Accessing s1.charAt(s1.length()) or s2.charAt(s2.length()) throws an exception
 
 The corrected implementation is available in `Exo2Correction.java`.
+
+## Exercise 3: BinarySearch Class
+
+### Bug Identified
+The `BinarySearch.binarySearch()` method contains two bugs:
+
+1. The loop condition `while (low < high)` is incorrect. It should be `while (low <= high)` to handle the case where the element might be at the last position (when low equals high).
+
+2. The condition `array[mid] <= element` in the else-if statement is incorrect. It should be `array[mid] < element`. The current implementation could skip the target element if it's equal to the middle element but not at the middle index.
+
+These bugs cause the method to:
+- Miss elements at the position where low = high
+- Potentially skip the target element due to incorrect comparison
+
+The corrected implementation is available in `Exo3Correction.java`.
