@@ -1,4 +1,4 @@
-package com.akeb.bonus2;
+package com.akeb.TP0.bonus2;
 
 public class Matrix {
     private int[][] array;

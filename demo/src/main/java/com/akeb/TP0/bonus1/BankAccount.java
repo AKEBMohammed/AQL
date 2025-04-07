@@ -1,4 +1,4 @@
-package com.akeb.bonus1;
+package com.akeb.TP0.bonus1;
 
 public class BankAccount {
     private double balance;

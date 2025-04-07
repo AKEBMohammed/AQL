@@ -1,9 +1,11 @@
-package com.akeb.bonus1;
+package com.akeb.TP0.bonus1;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import com.akeb.TP0.bonus1.BankAccount;
 
 public class BankAccountTest {
     

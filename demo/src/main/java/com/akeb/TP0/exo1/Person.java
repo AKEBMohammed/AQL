@@ -1,4 +1,4 @@
-package com.akeb.exo1;
+package com.akeb.TP0.exo1;
 
 public class Person {
     private String firstName;
