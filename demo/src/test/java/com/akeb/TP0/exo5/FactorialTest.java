@@ -1,7 +1,10 @@
-package com.akeb.exo5;
+package com.akeb.TP0.exo5;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import com.akeb.TP0.exo5.Factorial;
+
 import org.junit.jupiter.api.DisplayName;
 
 public class FactorialTest {

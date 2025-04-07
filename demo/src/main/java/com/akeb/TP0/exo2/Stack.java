@@ -1,4 +1,4 @@
-package com.akeb.exo2;
+package com.akeb.TP0.exo2;
 
 public class Stack {
     private int[] array;

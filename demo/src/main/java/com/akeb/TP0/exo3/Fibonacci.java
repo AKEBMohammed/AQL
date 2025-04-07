@@ -1,4 +1,4 @@
-package com.akeb.exo3;
+package com.akeb.TP0.exo3;
 
 public class Fibonacci {
     public static int fibonacci(int n) {

@@ -1,10 +1,12 @@
-package com.akeb.exo4;
+package com.akeb.TP0.exo4;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import com.akeb.TP0.exo4.Prime;
 
 public class PrimeTest {
 

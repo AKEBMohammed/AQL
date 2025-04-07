@@ -1,7 +1,10 @@
-package com.akeb.exo1;
+package com.akeb.TP0.exo1;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import com.akeb.TP0.exo1.Person;
+
 import org.junit.jupiter.api.DisplayName;
 
 public class PersonTest {

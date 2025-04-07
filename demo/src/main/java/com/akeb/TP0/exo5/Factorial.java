@@ -1,4 +1,4 @@
-package com.akeb.exo5;
+package com.akeb.TP0.exo5;
 
 public class Factorial {
     public static int factorial(int n) {

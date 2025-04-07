@@ -1,4 +1,4 @@
-package com.akeb.exo4;
+package com.akeb.TP0.exo4;
 
 public class Prime {
     public static boolean isPrime(int n) {
