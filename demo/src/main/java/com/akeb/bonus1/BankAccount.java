@@ -5,6 +5,12 @@ public class BankAccount {
     private double interestRate;
 
     public BankAccount(double balance, double interestRate) {
+        if (balance < 0) {
+            throw new IllegalArgumentException("Initial balance must be non-negative");
+        }
+        if (interestRate < 0) {
+            throw new IllegalArgumentException("Interest rate must be non-negative");
+        }
         this.balance = balance;
         this.interestRate = interestRate;
     }
@@ -30,11 +36,27 @@ public class BankAccount {
         if (other == null) {
             throw new NullPointerException("Other account must not be null");
         }
-        withdraw(amount);
-        other.deposit(amount);
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (amount > balance) {
+            throw new IllegalStateException("Insufficient balance");
+        }
+        // Fix transactional issue by only modifying accounts after validations
+        balance -= amount;
+        try {
+            other.deposit(amount);
+        } catch (Exception e) {
+            // Rollback if deposit fails
+            balance += amount;
+            throw e;
+        }
     }
 
     public void addInterest() {
+        if (interestRate < 0) {
+            throw new IllegalStateException("Cannot apply negative interest rate");
+        }
         balance = balance * (1 + interestRate);
     }
 
