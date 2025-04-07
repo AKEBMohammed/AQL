@@ -76,3 +76,18 @@ The implementation follows standard mathematical procedures for solving quadrati
 
 ### Coverage Tests
 All three coverage criteria (Line, Branch, and Condition) lead to similar test cases for this class, as the branching structure is simple and matches the conditions directly.
+
+## Exercise 5: RomanNumeral Class
+
+### Bug Identified
+The `RomanNumeral.toRoman()` method contains two critical bugs:
+
+1. The loop condition in the for loop is incorrect: `for (int i = 0; i <= symbols.length; i++)`. This will cause an `ArrayIndexOutOfBoundsException` on the last iteration because array indices are 0-based, and the valid range is from 0 to `symbols.length - 1`.
+
+2. The condition in the while loop is `n > values[i]`, which should be `n >= values[i]`. This means that when `n` equals a value in the array, it won't be processed. For example, if `n = 5`, it would never add the symbol "V" to the result.
+
+These bugs cause the method to:
+- Throw an exception when accessing `symbols[symbols.length]`
+- Incorrectly convert some numbers (e.g., exact values like 5, 10, etc. would be skipped and processed via smaller denominations)
+
+The corrected implementation is available in `Exo5Correction.java`.
