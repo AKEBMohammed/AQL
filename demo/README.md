@@ -59,3 +59,20 @@ These bugs cause the method to:
 - Potentially skip the target element due to incorrect comparison
 
 The corrected implementation is available in `Exo3Correction.java`.
+
+## Exercise 4: QuadraticEquation Class
+
+### Bug Analysis
+After thorough testing, no bugs were found in the `QuadraticEquation.solve()` method. The method correctly:
+
+1. Checks if the coefficient 'a' is zero and throws an appropriate exception
+2. Calculates the discriminant (delta) correctly
+3. Returns null for negative discriminants (no real roots)
+4. Returns a single root array for zero discriminant
+5. Returns two-root array for positive discriminant
+6. Uses the correct formula for calculating roots: (-b ± √delta)/(2a)
+
+The implementation follows standard mathematical procedures for solving quadratic equations and handles all edge cases properly.
+
+### Coverage Tests
+All three coverage criteria (Line, Branch, and Condition) lead to similar test cases for this class, as the branching structure is simple and matches the conditions directly.
