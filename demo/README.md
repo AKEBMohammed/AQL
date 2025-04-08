@@ -91,3 +91,24 @@ These bugs cause the method to:
 - Incorrectly convert some numbers (e.g., exact values like 5, 10, etc. would be skipped and processed via smaller denominations)
 
 The corrected implementation is available in `Exo5Correction.java`.
+
+## Exercise 6: FizzBuzz Class
+
+### Bug Analysis
+After thorough testing, a minor inconsistency was found in the `FizzBuzz.fizzBuzz()` method:
+
+The error message when `n <= 1` states "n must be positive", which is not entirely accurate because:
+1. The number 1 is actually positive, but still gets rejected
+2. A more precise message would be "n must be greater than 1"
+
+This is a semantic issue rather than a logical bug, as the code behavior is correct - it throws an exception for values less than or equal to 1. However, the error message could be improved for clarity.
+
+The corrected implementation is available in `Exo6Correction.java` with a more accurate error message.
+
+### Coverage Tests
+All three coverage criteria (Line, Branch, and Condition) yield similar test cases for this class due to its simple structure. Each test verifies:
+1. The validation of input values (n > 1)
+2. "FizzBuzz" output for numbers divisible by both 3 and 5
+3. "Fizz" output for numbers divisible by 3 only
+4. "Buzz" output for numbers divisible by 5 only
+5. String representation of the number for all other cases
