@@ -1,385 +1,311 @@
 1
-Tests Unitaires TP1
-Couverture du code
+Tests Unitaires TP2
+Mockups
 Objectifs
 Cette suite de TP a pour objectifs de vous apprendre à:
- Mesurer la couverture du code par les tests unitaires
- Utiliser les critères de couverture des lignes, des branches et des conditions
- Utiliser l’IDE Intellij IDEA pour vérifier la couverture du code
- Écrire des tests unitaires plus complets et plus robustes
+ Comprendre l’importance des tests unitaires dans le cycle de développement logiciel.
+ Apprendre à utiliser les mockups pour isoler les composants lors des tests.
+ Maîtriser l’utilisation de JUnit5 et Mockito pour la création de tests unitaires et de
+mockups.
+ Faire la différence entre un test d´état et un test des interactions.
 Prérequis
 Pour réaliser cette suite de TP, vous devez avoir:
  Une version de Java 8 ou supérieure
  Un IDE Intellij IDEA
  Une connexion internet
- Le premier manuel de TP sur les tests unitaires avec JUnit 5
-Qu’est-ce que la couverture du code?
-La couverture du code est une mesure qui indique le degré d’exécution du code
-source par les tests unitaires. Plus la couverture du code est élevée, plus les tests
-unitaires sont censés être complets et fiables. Cependant, la couverture du code ne
-garantit pas la qualité des tests unitaires, ni l’absence de défauts dans le code. Il faut
-donc utiliser la couverture du code comme un indicateur, et non comme un objectif.
-Il existe plusieurs critères de couverture du code, qui se basent sur différents
-éléments du code source, tels que les lignes, les branches, les conditions, les
-chemins, etc. Chaque critère de couverture du code définit un ensemble de cas de
-test à exécuter pour atteindre une couverture optimale. Plus le critère de couverture
-du code est fort, plus il exige de cas de test, mais plus il détecte de défauts
-potentiels.
-Dans cette suite de TP, nous allons nous intéresser aux trois critères de couverture du
-code suivants:
- La couverture des lignes
- La couverture des branches
- La couverture des conditions
+ Les premiers manuels de TP sur les tests unitaires avec JUnit 5
+Les mockups
+Les mockups sont des objets qui simulent le comportement d’objets réels de manière
+contrôlée. Ils sont particulièrement utiles dans les tests unitaires pour les raisons
+suivantes:
+ Isolation: Les mockups permettent de tester une partie du code en isolation, sans dépendre
+d’autres parties du code qui peuvent être coûteuses à mettre en place ou qui peuvent
+introduire des erreurs.
+ Contrôle: Avec les mockups, vous avez un contrôle total sur le comportement de l’objet. Vous
+pouvez définir exactement comment l’objet doit se comporter pour le scénario que vous
+testez.
+Un mockup est une instance d’une classe qui a le même type d’interface que l’objet
+réel, mais dont le comportement est contrôlé par le testeur. En d’autres termes, un
+mockup est un faux objet utilisé pour simuler le comportement d’un vrai objet dans
+un test unitaire.
+La bibliothèque Mockito
 2
-La couverture des lignes
-La couverture des lignes est le critère de couverture du code le plus simple. Il
-consiste à vérifier que chaque ligne de code source est exécutée au moins une fois
-par les tests unitaires. La couverture des lignes est exprimée en pourcentage, par
-rapport au nombre total de lignes de code source.
-Par exemple, considérons le code suivant:
-public class Calculator {
-public int add(int a, int b) {
-return a + b;
+Mockito est une bibliothèque populaire en Java pour la création de mockups. Elle
+fournit une API simple pour créer, configurer et utiliser des mockups dans les tests
+unitaires.
+Installation de Mockito
+Pour installer Mockito, vous devez ajouter la dépendance Mockito à votre fichier de
+gestion de dépendances. Voici comment vous pouvez le faire pour Maven:
+<dependencies>
+<dependency>
+<groupId>org.mockito</groupId>
+<artifactId>mockito-core</artifactId>
+<version>4.2.0</version>
+<scope>test</scope>
+</dependency>
+</dependencies>
+Importation et configuration de Mockito
+Après avoir installé Mockito, vous pouvez l’importer dans vos fichiers de test avec
+l’instruction d’importation suivante:
+import static org.mockito.Mockito.*;
+Deux manières sont possibles pour intégrer Mockito dans les tests Junit :
+1- Ajouter l’annotation @RunWith(MockitoJunitRunner.class) à la classe de test :
+@RunWith(MockitoJunitRunner.class)
+public class MyTestClass {
 }
-public int subtract(int a, int b) {
-return a - b;
+2- Faire appel à la méthode initMocks dans la méthode de SetUp :
+@Before
+public void setUp() {
+MockitoAnnotations.initMocks(this);
 }
-public int multiply(int a, int b) {
-return a * b;
-}
-public int divide(int a, int b) {
-if (b == 0) {
-throw new ArithmeticException("Division by zero");
-}
-return a / b;
-}
-}
-Ce code contient 11 lignes de code source (sans compter les lignes vides et les
-accolades). Si on écrit un test unitaire qui appelle la méthode add avec les paramètres
-2 et 3, on exécute 2 lignes de code source: la signature de la méthode add et
-le return a + b . La couverture des lignes de ce test unitaire est donc de 2 / 11 =
-18,18%.
-Pour augmenter la couverture des lignes, il faut écrire des tests unitaires qui
-appellent les autres méthodes du code source, avec des paramètres variés. Par
-exemple, si on écrit un test unitaire qui appelle la méthode divide avec les
-paramètres 4 et 2, on exécute 3 lignes de code source: la signature de la
-méthode divide , le if (b == 0) et le return a / b . La couverture des lignes de ce
-test unitaire est donc de 3 / 11 = 27,27%.
-La couverture des lignes maximale est atteinte lorsque tous les tests unitaires
-exécutent toutes les lignes de code source. Dans notre exemple, il faudrait écrire au
-moins un test unitaire qui appelle la méthode divide avec un paramètre b égal à 0,
+Création d’un mock
+La création d’objets mockés se fait soit en appelant la méthode mock(), soit en
+rajoutant l’annotation @Mock pour les instances de classes.
+User user = Mockito.mock(User.class);
+Ou bien
 3
-pour exécuter la ligne throw new ArithmeticException("Division by zero") . La
-couverture des lignes maximale serait alors de 11 / 11 = 100%.
-La couverture des branches
-La couverture des branches est un critère de couverture du code plus fort que la
-couverture des lignes. Il consiste à vérifier que chaque branche du code source est
-exécutée au moins une fois par les tests unitaires. Une branche est une portion de
-code qui est exécutée en fonction d’une condition, telle qu’un if , un switch ,
-un while , un for , etc. La couverture des branches est exprimée en pourcentage, par
-rapport au nombre total de branches du code source.
-Par exemple, considérons le code suivant:
-public class Prime {
-public static boolean isPrime(int n) {
-if (n < 2) {
-return false;
-}
-for (int i = 2; i <= Math.sqrt(n); i++) {
-if (n % i == 0) {
-return false;
-}
-}
-return true;
-}
-}
-Ce code contient 4 branches:
- La branche if (n < 2)
- La branche else implicite du if (n < 2)
- La branche if (n % i == 0)
- La branche else implicite du if (n % i == 0)
-Si on écrit un test unitaire qui appelle la méthode isPrime avec le paramètre 1, on
-exécute 2 branches: la branche if (n < 2) et la branche return false . La couverture
-des branches de ce test unitaire est donc de 2 / 4 = 50%.
-Pour augmenter la couverture des branches, il faut écrire des tests unitaires qui
-exécutent les autres branches du code source, avec des paramètres variés. Par
-exemple, si on écrit un test unitaire qui appelle la méthode isPrime avec le
-paramètre 5, on exécute 3 branches: la branche else implicite du if (n < 2) , la
-branche else implicite du if (n % i == 0) et la branche return true . La couverture
-des branches de ce test unitaire est donc de 3 / 4 = 75%.
-La couverture des branches maximale est atteinte lorsque tous les tests unitaires
-exécutent toutes les branches du code source. Dans notre exemple, il faudrait écrire
+@Mock
+User user;
+Mockito encapsule et contrôle tous les appels effectués sur l’objet User. Ainsi
+user.getLogin() retournera tout le temps null si on ne « stubb » pas la méthode
+getLogin().
+Un autre exemple : pour créer un mock d’une interface MonInterface , vous pouvez
+faire comme suit:
+MonInterface maMock = mock(MaInterface.class);
+Stubbing
+Le stubbing vous permet de définir le comportement de votre mock. Par exemple, vous
+pouvez configurer votre mock pour qu’il renvoie une certaine valeur lorsque l’une de
+ses méthodes est appelée. Voici comment vous pouvez le faire:
+when(maMock.maMethode()).thenReturn("valeur");
+Avec cette configuration, chaque fois que maMethode() est appelée sur maMock , elle
+renverra la chaîne “valeur”.
+Vérification des interactions
+Mockito vous permet de vérifier si certaines méthodes ont été appelées sur votre
+mock. Par exemple, pour vérifier si maMethode() a été appelée sur maMock , vous pouvez
+faire comme suit:
+verify(maMock).maMethode();
+Cela vérifiera que maMethode() a été appelée exactement une fois sur maMock .
+Test d’état et tests d’interactions
+Dans les tests unitaires, en particulier lors de l’utilisation de mockups, on distingue
+généralement deux types de tests : les tests d’état et les tests d’interaction.
+ Test d’état : Un test d’état vérifie le comportement d’une méthode en examinant l’état
+de l’objet après que la méthode a été exécutée. Par exemple, si vous avez une méthode
+qui ajoute un élément à une liste, un test d’état pourrait vérifier que la taille de la liste
+a augmenté de 1 après l’appel de la méthode. Dans ce type de test, vous vous
+concentrez sur le résultat de l’opération, pas sur la façon dont le résultat a été obtenu.
+ Test d’interaction : Un test d’interaction vérifie le comportement d’une méthode en
+examinant ses interactions avec ses dépendances. Par exemple, si vous avez une
 4
-au moins un test unitaire qui appelle la méthode isPrime avec un paramètre divisible
-par un nombre entre 2 et sa racine carrée, comme 9, pour exécuter la branche if (n
-% i == 0) et la branche return false . La couverture des branches maximale serait
-alors de 4 / 4 = 100%.
-La couverture des conditions
-La couverture des conditions est un critère de couverture du code plus fort que la
-couverture des branches. Il consiste à vérifier que chaque condition du code source
-est évaluée à vrai et à faux au moins une fois par les tests unitaires. Une condition est
-une expression booléenne qui contrôle l’exécution d’une branche, telle qu’un if ,
-un switch , un while , un for , etc. La couverture des conditions est exprimée en
-pourcentage, par rapport au nombre total de conditions du code source.
-Par exemple, considérons le code suivant:
-public class Calculator {
-public int max(int a, int b, int c) {
-if (a > b && a > c) {
-return a;
-} else if (b > a && b > c) {
-return b;
-} else {
-return c;
+méthode qui utilise un service pour récupérer des données et effectuer une opération
+sur ces données, un test d’interaction pourrait vérifier que la méthode a bien appelé
+le service avec les bons arguments. Dans ce type de test, vous vous concentrez sur la
+façon dont l’opération a été effectuée, pas nécessairement sur le résultat de
+l’opération.
+Lorsque vous utilisez des mockups, vous pouvez utiliser à la fois des tests d’état et des
+tests d’interaction. Vous pouvez configurer le mockup pour qu’il se comporte d’une
+certaine manière lorsqu’il est utilisé par l’objet que vous testez (c’est-à-dire, vous
+pouvez “stubber” le comportement du mockup), puis vous pouvez vérifier que l’objet
+que vous testez a interagi avec le mockup de la manière attendue.
+Exemple de Mockup
+Voici un exemple complet d’utilisation de Mockito avec le principe AAA (Arrange,
+Act, Assert):
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+class MaClasseTest {
+@Test
+void monTest() {
+// Arrange
+MonInterface maMock = mock(MonInterface.class);
+when(maMock.maMethode()).thenReturn("mock");
+MaClasse maClasse = new MaClasse(maMock);
+// Act
+String resultat = maClasse.maMethode();
+// Assert
+assertEquals("mock", resultat);
 }
 }
-}
-Ce code contient 4 conditions:
- La condition a > b
- La condition a > c
- La condition b > a
- La condition b > c
-Si on écrit un test unitaire qui appelle la méthode max avec les paramètres 1, 2 et 3,
-on évalue 2 conditions à vrai et 2 conditions à faux:
- La condition a > b est fausse
- La condition a > c est fausse
- La condition b > a est vraie
- La condition b > c est fausse
-La couverture des conditions de ce test unitaire est donc de 4 / 8 = 50%. Pour
-augmenter la couverture des conditions, il faut écrire des tests unitaires qui évaluent
-les autres combinaisons possibles de vrai et de faux pour chaque condition. Par
+Dans cet exemple, nous créons un mock de MonInterface et nous configurons son
+comportement pour que maMethode() renvoie "mock". Ensuite, nous utilisons ce
+mock dans MaClasse et nous vérifions que maMethode() de MaClasse renvoie
+bien "mock".
+Pour ce TP, il est question d’écrire des tests unitaires en isolations pour chaque
+exercice. Pusher vos tests par la suite sur vos comptes Github. N’oublier pas de pusher
+vos réponses aux questions dans un fichier README sur votre repository.
 5
-exemple, si on écrit un test unitaire qui appelle la méthode max avec les paramètres 3,
-2 et 1, on évalue 2 conditions à vrai et 2 conditions à faux:
- La condition a > b est vraie
- La condition a > c est vraie
- La condition b > a est fausse
- La condition b > c est fausse
-La couverture des conditions de ce test unitaire est donc de 7 / 8 = 87.5%.
-La couverture des conditions maximale est atteinte lorsque tous les tests unitaires
-évaluent toutes les combinaisons possibles de vrai et de faux pour chaque condition.
-Dans notre exemple, il faudrait écrire au moins 4 tests unitaires pour couvrir toutes
-les combinaisons possibles:
- Un test unitaire qui appelle la méthode max avec les paramètres 1, 2 et 3
- Un test unitaire qui appelle la méthode max avec les paramètres 3, 2 et 1
- Un test unitaire qui appelle la méthode max avec les paramètres 2, 3 et 1
- Un test unitaire qui appelle la méthode max avec les paramètres 1, 1 et 1
-La couverture des conditions maximale serait alors de 8 / 8 = 100%.
-Comment vérifier la couverture du code avec Intellij
-IDEA et JUnit 5?
-Intellij IDEA est un IDE intègre un outil de test et de couverture du code, qui permet
-de vérifier la couverture des lignes, des branches et des conditions par les tests
-unitaires écrits avec JUnit 5.
-Pour utiliser cet outil, il faut suivre les étapes suivantes:
- Créer un projet Java avec Intellij IDEA
- Ajouter les dépendances de JUnit 5 dans le fichier pom.xml
- Créer un dossier src/test/java pour y placer les classes de test
- Créer une classe de test avec l’annotation @Test sur les méthodes de test
- Faire un clic droit sur la classe de test et choisir Run ... with Coverage
- Vérifier le résultat de la couverture du code dans la fenêtre Coverage
-L’outil de couverture du code affiche le pourcentage de couverture des lignes, des
-branches et des conditions pour chaque classe et méthode du code source. Il affiche
-aussi le code source avec des couleurs différentes selon le degré de couverture:
- Vert: la ligne, la branche ou la condition a été exécutée par les tests unitaires
- Rouge: la ligne, la branche ou la condition n’a pas été exécutée par les tests unitaires
- Jaune: la branche ou la condition a été partiellement exécutée par les tests unitaires
+Exercice1 : Initiation
+On cherche à tester le comportement d'une méthode d'un objet et l'état de l'objet
+après l'appel de la méthode. Supposons que nous avons une classe Calculatrice avec
+une méthode additionner(int a, int b) qui additionne deux nombres et
+retourne le résultat.
+Voici la classe à tester :
+public class Calculatrice {
+public int additionner(int a, int b) {
+result = a + b ;
+return result;
+}
+private int result ;
+}
+Sur la base du test donné ci-dessous, compléter les //TODO.
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import static org.mockito.Mockito.*;
+@RunWith(MockitoJUnitRunner.class)
+public class CalculatriceTest {
+@Mock
+private Calculatrice calculatrice;
+@Test
+public void testAdditionner() {
+// Définition du comportement de la méthode "additionner"
+when(calculatrice.additionner(2, 3)).thenReturn(5);
+//TODO : Appel de la méthode à tester
+// ...
+//TODO : Vérification du résultat
+// ...
+//TODO : Vérification que la méthode "additionner" a été appelée
+// avec les arguments 2 et 3, utiliser la directive « verify »
+//TODO : Vérification qu'aucune autre méthode n'a été appelée sur
+//l'objet après l'appel de la méthode "additionner", utiliser la
+// méthode « verifyNoMoreInteractions »
+// TODO : Vérification de l'état de l'objet après l'appel de la
+//méthode "additionner", penser à utiliser la méthode
+//« getState() » de la directive « verify » : // exemple :
+verify(objet).getState()
+}
+}
 6
-L’outil de couverture du code permet aussi de configurer les critères de couverture
-du code à utiliser, en cliquant sur le bouton Edit configurations dans la
-fenêtre Coverage . On peut alors choisir le type de couverture du code à
-mesurer: Tracing , Sampling ou Branches .
- Tracing est le mode le plus précis, qui mesure la couverture des lignes, des branches et des
-conditions. Il est aussi le plus lent, car il instrumente le code source pour enregistrer chaque
-exécution.
- Sampling est le mode le plus rapide, qui mesure la couverture des lignes uniquement. Il est
-aussi le moins précis, car il utilise des sondages périodiques pour estimer l’exécution du code
-source.
- Branches est le mode intermédiaire, qui mesure la couverture des lignes et des branches. Il
-est plus rapide que Tracing , mais plus lent que Sampling . Il est plus précis que Sampling ,
-mais moins que Tracing .
-Note
-L’outil de couverture du code sur Intellij IDEA est installé par défaut, car il fait partie
-du plugin Coverage, qui est fourni avec l’IDE. Vous n’avez donc pas besoin de le
-rajouter. Vous pouvez vérifier si le plugin Coverage est activé en allant dans
-Paramètres > Plugins et en cherchant Coverage dans la liste des plugins installés. Si
-le plugin est désactivé, vous pouvez l’activer en cochant la case correspondante.
-Pour utiliser l’outil de couverture du code, vous devez configurer votre classe de test
-avec le runner de couverture de votre choix: Intellij IDEA, JaCoCo ou Emma (vous
-pouvez utiliser le runner de couverture qui vous convient). Vous pouvez le faire en
-cliquant sur le bouton Edit Configurations dans la fenêtre Coverage, ou en ouvrant la
-boîte de dialogue Run/Debug Configurations et en sélectionnant l’onglet Code
-Coverage. Vous pouvez ensuite lancer votre classe de test avec la couverture en
-faisant un clic droit sur la classe et en choisissant Run … with Coverage. Vous verrez
-alors le résultat de la couverture du code dans la fenêtre Coverage, ainsi que le code
-source coloré selon le degré de couverture.
-Pour ce TP, il est question d’écrire des tests unitaires sur la base des critères de
-couverture (de lignes, de branches et de conditions) pour chaque exercice. Pusher
-vos tests par la suite sur vos comptes Github en respectant la nomenclature suivante:
-TP1/{LineCoverageTest}/Exo1Test.class
-TP1/{BranchCoverageTest}/Exo1Test.class
-TP1/{ConditionCoverageTest}/Exo1Test.class
-NB : Si vous jugez que, par exemple pour le même exercice deux critères de
-couverture donnent les mêmes tests, mentionnez-le sur un fichier ReadMe dans
-votre repository.
+Exercice 2 : Mocker un service externe (API)
+Imaginons une application qui gère des utilisateurs. L'application utilise une classe
+UserService pour interagir avec un service web d'API utilisateurs. La classe
+UserService a une méthode creerUtilisateur(Utilisateur utilisateur) qui envoie
+les informations du nouvel utilisateur à l'API pour le créer.
+Ci-dessous vous avez l’implémentation des deux classes : la classe (interface) à tester
+et du service simulé.
+public class UserService {
+private final UtilisateurApi utilisateurApi;
+public UserService(UtilisateurApi utilisateurApi) {
+this.utilisateurApi = utilisateurApi;
+}
+public void creerUtilisateur(Utilisateur utilisateur) throws
+ServiceException {
+utilisateurApi.creerUtilisateur(utilisateur);
+}
+}
+public interface UtilisateurApi {
+void creerUtilisateur(Utilisateur utilisateur) throws ServiceException;
+}
+Sur la base du code donné, et du test ci-dessous, compléter les //TODO.
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import static org.mockito.Mockito.*;
+@RunWith(MockitoJUnitRunner.class)
+public class UserServiceTest {
+@Mock
+private UtilisateurApi utilisateurApiMock;
+@Test
+public void testCreerUtilisateur() throws ServiceException {
+// Création d'un nouvel utilisateur
+Utilisateur utilisateur = new Utilisateur("Jean", "Dupont",
+"jeandupont@email.com");
+// TODO : Configuration du comportement du mock, utiliser la
+//directive « when » avec sa méthode « thenReturn »
+// ...
+// TODO : Création du service avec le mock
+// ...
+// TODO : Appel de la méthode à tester
 7
-Si vous trouvez un bug, mentionnez l’erreur dans ce même fichier ReadMe, et
-proposer un changement qu’il faut pusher (par exemple Exo1Correction.Class pour
-la correction de l’exercice 1).
-Exercice 1
-La classe Palindrome contient une méthode statique isPalindrome qui vérifie si une
-chaîne de caractères est un palindrome, c’est-à-dire si elle se lit de la même façon de
-gauche à droite et de droite à gauche. La méthode ignore les espaces et la casse des
-lettres. Par exemple, “kayak” et “Esope reste ici et se repose” sont des palindromes.
-public class Palindrome {
-public static boolean isPalindrome(String s) {
-if (s == null) {
-throw new NullPointerException("String must not be null");
-}
-s = s.toLowerCase().replaceAll("\\s+", "");
-int i = 0;
-int j = s.length() - 1;
-while (i < j) {
-if (s.charAt(i) != s.charAt(j)) {
-return false;
-}
-j++;
-i--;
-}
-return true;
+// ...
+// TODO : Vérification de l'appel à l'API
+// ...
 }
 }
-Exercice 2
-La classe Anagram contient une méthode statique isAnagram qui vérifie si deux
-chaînes de caractères sont des anagrammes, c’est-à-dire si elles contiennent les
-mêmes lettres dans un ordre différent. La méthode ignore les espaces et la casse des
-lettres. Par exemple, “chien” et “niche” sont des anagrammes.
-public class Anagram {
-public static boolean isAnagram(String s1, String s2) {
-if (s1 == null || s2 == null) {
-throw new NullPointerException("Strings must not be null");
-}
-s1 = s1.toLowerCase().replaceAll("\\s+", "");
-s2 = s2.toLowerCase().replaceAll("\\s+", "");
-if (s1.length() != s2.length()) {
-return false;
-}
+Exercice 3 : Mocker un service externe avec différents scénarios
+Dans le même contexte que celui de l’exercice 2, on veut tester différents scénarios
+susceptibles d’avoir lieu - dans des conditions réelles - lors de la création de l’utilisateur
+et lors de son envoi à l’API. Compléter les tests qui afin de répondre aux scénarios
+suivants :
+1. Lever une exception lors de la création de l'utilisateur avec l’exception suivante :
+ServiceException("Echec de la création de l'utilisateur").
+2. Tester le comportement en cas d'erreur de validation. Penser à utiliser la
+méthode never() , comme deuxième paramètre pour la directive « verify ».
+3. Supposons que l'API renvoie un identifiant unique pour l'utilisateur créé,
+compléter les TODO sur le test donné ci-dessous afin de vérifier l'état de
+l'objet Utilisateur après son envoi à l'API.
+when(utilisateurApiMock.creerUtilisateur(utilisateur)).thenReturn(true);
+// Définition d'un ID fictif
+int idUtilisateur = 123;
+// TODO: Configuration du mock pour renvoyer l'ID
+//...
+// Appel de la méthode à tester
+userService.creerUtilisateur(utilisateur);
+// TODO: Vérification de l'ID de l'utilisateur
+//...
+4. On veut utiliser des arguments capturés pour vérifier les arguments exacts.
+Pour cela, implémenter le TODO suivant pour capturer les arguments passés à
+la méthode creerUtilisateur du mock .
+ArgumentCaptor<Utilisateur> argumentCaptor =
+ArgumentCaptor.forClass(Utilisateur.class);
+when(utilisateurApiMock.creerUtilisateur(any(Utilisateur.class))).thenRetur
+n(true);
+userService.creerUtilisateur(utilisateur);
+Utilisateur utilisateurCapture = argumentCaptor.getValue();
+// TODO : Vérification des arguments capturés, utiliser les getters de
+//l’objet utilisateurCapture
+//...
 8
-int[] count = new int[26];
-for (int i = 0; i <= s1.length(); i++) {
-count[s1.charAt(i) - 'a']++;
-count[s2.charAt(i) - 'a']--;
+Exercice 4 : Jeu de dés
+On s’intéresse à des jeux de hasard et d’argent du type casino en ligne. Le sujet n’est
+pas très réaliste.
+Le jeu qui nous intéresse, le “jeu du 7”, se joue avec 2 dés et une banque qui gère les
+pertes et les gains. Le joueur qui veut jouer propose une mise, qui est la valeur de son
+pari. Les dés sont du modèle classique à tirage aléatoire entre 1 et 6. La banque
+encaisse les paris et décaisse les gains. En cas de gains trop importants, la banque peut
+ne plus être solvable, alors le jeu ferme.
+La règle du jeu est la suivante. On ne peut jouer qu’à un jeu ouvert. Le joueur propose
+interactivement une mise, puis est débité du montant de son pari. S’il est insolvable, le
+jeu s’arrête là. Sinon la mise est encaissée par la banque. Ensuite, les 2 dés sont lancés.
+Si la somme des lancers ne vaut pas 7, le joueur a perdu sa mise et le jeu s’arrête là. Si
+la somme des lancers vaut 7, alors le joueur gagne : la banque paye deux fois la mise,
+somme créditée au joueur. Le jeu consulte la banque pour savoir si elle est encore
+solvable, et si ce n’est pas le cas, il ferme.
+L’interface de la classe Jeu est la suivante :
+public Jeu(Banque labanque);
+public void jouer(Joueur joueur, De de1, De de2) throwsJeuFermeException;
+public void fermer();
+public boolean estOuvert();
+Le sujet consiste à tester en isolation la méthode jouer. Le test sera donc purement
+unitaire au niveau de la classe. On ne demande pas d’écrire ni de tester les autres
+classes sauf dernière question : limitez-vous à des interfaces et utilisez des doublures.
+On propose les interfaces suivantes :
+public interface De { public int lancer(); }
+public interface Joueur {
+public int mise(); // on suppose que mise positive
+public void debiter(int somme) throws DebitImpossibleException;
+public void crediter(int somme);
 }
-for (int c : count) {
-if (c != 0) {
-return false;
+public interface Banque {
+public void crediter(int somme);
+public boolean est_solvable();
+public void debiter(int somme);
 }
-}
-return true;
-}
-}
-Exercice 3
-La classe BinarySearch contient une méthode statique binarySearch qui recherche
-un élément dans un tableau trié d’entiers, en utilisant l’algorithme de la recherche
-binaire. La méthode renvoie l’indice de l’élément dans le tableau, ou -1 s’il n’est pas
-présent.
-public class BinarySearch {
-public static int binarySearch(int[] array, int element) {
-if (array == null) {
-throw new NullPointerException("Array must not be null");
-}
-int low = 0;
-int high = array.length - 1;
-while (low < high) {
-int mid = (low + high) / 2;
-if (array[mid] == element) {
-return mid;
-} else if (array[mid] <= element) {
-low = mid + 1;
-} else {
-high = mid - 1;
-}
-}
-return -1;
-}
-}
-Exercice 4
-La classe QuadraticEquation contient une méthode statique solve qui résout une
-équation du second degré de la forme ax^2 + bx + c = 0, où a, b et c sont des
-coefficients réels. La méthode renvoie un tableau contenant les racines réelles de
-l’équation, ou null s’il n’y en a pas.
+1. Quels objets dont dépend la classe Jeu sont forcément mockés dans un test
+pour automatiser jouer ? Pourquoi? Répondre dans le fichier README.
+2. Lister les scénarios (classes d’équivalence) que vous allez écrire pour tester
+jouer, en les décrivant dans le README.
+3. Écrire le code Java pour Jeu.
 9
-public class QuadraticEquation {
-public static double[] solve(double a, double b, double c) {
-if (a == 0) {
-throw new IllegalArgumentException("a must not be zero");
-}
-double delta = (b * b )- (4* a * c);
-if (delta < 0) {
-return null;
-}
-if (delta == 0) {
-return new double[]{-b / (2 * a)};
-}
-return new double[]{
-(-b + Math.sqrt(delta)) / (2 * a),
-(-b - Math.sqrt(delta)) / (2 * a)
-};
-}
-}
-Exercice 5
-La classe RomanNumeral contient une méthode statique toRoman qui convertit un
-nombre entier positif en chiffre romain. La méthode utilise les symboles I, V, X, L, C, D
-et M, qui représentent respectivement les valeurs 1, 5, 10, 50, 100, 500 et 1000. La
-méthode suit les règles suivantes pour former les chiffres romains:
- Les symboles I, X, C et M peuvent être répétés au plus trois fois de suite.
- Les symboles V, L et D ne peuvent pas être répétés.
- Les symboles I, X et C peuvent être placés avant un symbole de valeur supérieure
-pour former une soustraction. Par exemple, IV = 4, IX = 9, XL = 40, XC = 90, CD =
-400, CM = 900.
- Les symboles V, L et D ne peuvent pas être placés avant un symbole de valeur
-supérieure.
- Les symboles sont placés par ordre décroissant de valeur, sauf en cas de
-soustraction.
-public class RomanNumeral {
-public static String toRoman(int n) {
-if (n < 1 || n > 3999) {
-throw new IllegalArgumentException("n must be between 1 and
-3999");
-}
-String[] symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL",
-"X", "IX", "V", "IV", "I"};
-int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4,
-1};
-10
-StringBuilder sb = new StringBuilder();
-for (int i = 0; i <= symbols.length; i++) {
-while (n > values[i]) {
-sb.append(symbols[i]);
-n -= values[i];
-}
-}
-return sb.toString();
-}
-}
-Exercice 6
-La classe FizzBuzz contient une méthode statique fizzBuzz qui renvoie une chaîne
-de caractères selon les règles suivantes:
- Si le nombre est divisible par 3, renvoyer “Fizz”.
- Si le nombre est divisible par 5, renvoyer “Buzz”.
- Si le nombre est divisible par 3 et par 5, renvoyer “FizzBuzz”.
- Sinon, renvoyer le nombre sous forme de chaîne de caractères.
-public class FizzBuzz {
-public static String fizzBuzz(int n) {
-if (n <= 1) {
-throw new IllegalArgumentException("n must be positive");
-}
-if (n % 15 == 0) {
-return "FizzBuzz";
-}
-if (n % 3 == 0) {
-return "Fizz";
-}
-if (n % 5 == 0) {
-return "Buzz";
-}
-return String.valueOf(n);
-}
-}
+4. Commencer par écrire le test le plus simple : le cas où le jeu est fermé. Est-ce
+un test d’état ou un test des interactions ? Répondre dans le README.
+5. Tester le cas où le joueur est insolvable. Comment tester que le jeu ne touche
+pas aux dés ? Est-ce un test d’état ou un test des interactions ? Répondre dans
+le README.
+6. Continuer avec les autres scénarios.
+La banque possède un fond, et un fond minimum à ne pas dépasser (initialisés dans
+le constructeur). Si elle passe en dessous de ce niveau suite à un pari gagnant, le gain
+est quand même donné au joueur, mais le jeu ferme car la banque n’est plus solvable.
+7. Écrire une implémentation pour la banque, et écrire à nouveau un des tests
+impliquant la banque, en l’intégrant cette fois (donner un titre parlant). Méditer
+sur la différence entre les 2 tests.
