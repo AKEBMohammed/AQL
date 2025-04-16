@@ -55,9 +55,9 @@ public class JeuTest {
         verify(joueurMock).mise();
         verify(joueurMock).debiter(mise);
         // Vérifier que le jeu ne touche pas aux dés
-        verifyZeroInteractions(de1Mock, de2Mock);
+        verifyNoInteractions(de1Mock, de2Mock);
         // Vérifier que la banque n'a pas été créditée
-        verifyZeroInteractions(banqueMock);
+        verifyNoInteractions(banqueMock);
     }
     
     // Test 3: Le cas où le joueur perd (somme != 7)
