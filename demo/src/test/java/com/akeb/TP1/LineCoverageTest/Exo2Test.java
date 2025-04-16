@@ -1,6 +1,5 @@
 package com.akeb.TP1.LineCoverageTest;
 
-import com.akeb.TP1.exo2.Anagram;
 import com.akeb.TP1.exo2.Exo2Correction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
