@@ -112,3 +112,60 @@ All three coverage criteria (Line, Branch, and Condition) yield similar test cas
 3. "Fizz" output for numbers divisible by 3 only
 4. "Buzz" output for numbers divisible by 5 only
 5. String representation of the number for all other cases
+
+# TP2 - Mockups
+
+# Exercice 4 : Jeu de dés - Réponses aux questions
+
+## Question 1
+**Quels objets dont dépend la classe Jeu sont forcément mockés dans un test pour automatiser jouer ? Pourquoi?**
+
+Les objets suivants doivent être mockés dans un test unitaire pour isoler la classe `Jeu` :
+- `Joueur` : Car il fournit la mise et on doit pouvoir simuler différents comportements (solvable/insolvable).
+- `De` (2 instances) : Car ils produisent des valeurs aléatoires, mais pour les tests nous avons besoin de contrôler ces valeurs.
+- `Banque` : Car elle gère l'argent et on doit pouvoir simuler différents états (solvable/insolvable).
+
+Ces objets doivent être mockés car :
+1. Ils ont leur propre comportement complexe qui ne fait pas partie de la classe testée
+2. Ils peuvent produire des résultats non déterministes (les dés)
+3. Nous voulons tester la logique du jeu indépendamment de l'implémentation de ces dépendances
+
+## Question 2
+**Lister les scénarios (classes d'équivalence) que vous allez écrire pour tester jouer.**
+
+1. **Jeu fermé** : Le jeu est fermé, une exception `JeuFermeException` devrait être lancée.
+2. **Joueur insolvable** : Le joueur n'a pas assez d'argent pour sa mise, le jeu s'arrête après le débit qui échoue.
+3. **Joueur perd** : La somme des dés n'est pas 7, le joueur perd sa mise et le jeu continue.
+4. **Joueur gagne et banque solvable** : La somme des dés est 7, le joueur gagne et reçoit 2 fois sa mise, la banque reste solvable.
+5. **Joueur gagne et banque insolvable** : La somme des dés est 7, le joueur gagne mais la banque devient insolvable, le jeu ferme.
+
+## Question 4
+**Commencer par écrire le test le plus simple : le cas où le jeu est fermé. Est-ce un test d'état ou un test des interactions ?**
+
+C'est un test d'état. Nous vérifions que l'état de l'objet `Jeu` (sa propriété `ouvert` à `false`) entraîne bien le comportement attendu (lancer une exception). Nous ne testons pas les interactions avec d'autres objets mais plutôt le comportement basé sur l'état interne.
+
+## Question 5
+**Tester le cas où le joueur est insolvable. Comment tester que le jeu ne touche pas aux dés ? Est-ce un test d'état ou un test des interactions ?**
+
+Pour tester que le jeu ne touche pas aux dés lorsque le joueur est insolvable, j'utilise `verifyZeroInteractions(de1Mock, de2Mock)`, ce qui vérifie qu'aucune méthode n'a été appelée sur ces objets.
+
+C'est un test d'interactions car nous vérifions :
+1. L'interaction avec le joueur pour obtenir sa mise et tenter de le débiter
+2. L'absence d'interaction avec les dés et la banque
+
+## Différence entre les deux approches de test (Question 7)
+
+La différence principale entre les deux approches (avec mock de la banque versus une implémentation réelle) :
+
+1. **Test avec mock** :
+   - Teste uniquement la logique du jeu en isolation
+   - Utilise des assertions d'interactions (verify) pour s'assurer que la banque est appelée correctement
+   - Ne teste pas le comportement réel de la banque
+
+2. **Test avec implémentation réelle** :
+   - Teste l'intégration entre le jeu et la banque
+   - Permet de vérifier l'état réel de la banque après les opérations
+   - Plus proche d'un scénario réel d'utilisation
+
+L'avantage du test avec mock est qu'il est plus ciblé et isolé, ce qui facilite l'identification des problèmes dans la classe Jeu spécifiquement. Le test avec implémentation réelle est plus complet mais introduit une dépendance à l'implémentation de la Banque, ce qui peut rendre le diagnostic plus complexe en cas d'échec du test.
+
