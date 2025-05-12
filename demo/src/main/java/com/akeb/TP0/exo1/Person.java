@@ -1,5 +1,10 @@
 package com.akeb.TP0.exo1;
 
+/** 
+ * Represents a person with a name and age.
+ * Provides methods to get the full name and check if the person is an adult.
+ */
+
 public class Person {
     private String firstName;
     private String lastName;
