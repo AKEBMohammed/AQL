@@ -1,5 +1,10 @@
 package com.akeb.TP0.exo2;
 
+
+/**
+ * Stack implementation using an array.
+ * Provides methods to push, pop, peek, check if the stack is empty, and get the size of the stack.
+ */
 public class Stack {
     private int[] array;
     private int top;
