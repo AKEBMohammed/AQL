@@ -1,67 +1,224 @@
 1
-Tests Unitaires TP3
-Tests d’intégration – partie 1
+Tests Unitaires TP4
+Tests d’intégration
+Docker, Testcontainers et Spring Boot
 Objectifs
-Ce TP vous guidera à travers les tests d'intégration sur Java en utilisant différents
-scénarios de complexité croissante. Nous explorerons les tests d'interaction entre les
-modules, les bases de données et les API. Vous allez apprendre dans cette première
-partie de ce TP:
- Comprendre les concepts des tests d'intégration en Java.
- Pratiquer l'écriture de tests d'intégration en utilisant JUnit.
- Implémenter des mocks pour les dépendances pendant les tests.
+Ce TP vise à vous familiariser avec Docker et la bibliothèque Testcontainers, deux
+outils essentiels pour réaliser des tests d’intégration Java robustes et fiables. Vous
+apprendrez à:
+ Comprendre les concepts fondamentaux de Docker: images, conteneurs,
+registres, Docker Compose.
+ Utiliser Docker pour exécuter des applications Java dans des conteneurs isolés.
+ Effectuer des tests d'intégration Java robustes et fiables avec Testcontainers.
+ Mettre en pratique vos connaissances avec des exercices et des exemples
+concrets.
 Prérequis
 Pour réaliser cette ce TP, vous devez avoir:
  Une version de Java 8 ou supérieure
  Un IDE Intellij IDEA
  Une connexion internet
- Les premiers manuels de TP sur les tests unitaires avec JUnit 5
-Pour ce TP, il est question d’implémenter les classes nécessaires pour chaque exercice
-et d’écrire des tests d’intégration pour chaque cas. Pusher vos implémentations ainsi
-que vos tests par vos comptes Github. N’oublier pas de pusher vos réponses aux
-questions dans un fichier README sur votre repository.
-Exercice1 : Interaction Simple entre Modules
-Scénario :
-Une classe UserService récupère les données d'un utilisateur à partir d'une classe
-UserRepository .
-Tâches :
-1. Créer une classe UserService avec une méthode getUserById(long id) qui
-récupère un objet utilisateur du UserRepository .
-2. Créer une interface UserRepository avec une méthode findUserById(long
-id).
-3. Écrire un test JUnit pour UserService.getUserById(long id) . Utilisez un objet
-mock pour UserRepository afin de simuler la récupération de l'utilisateur.
+ Un système d'exploitation compatible avec Docker: Windows, macOS ou Linux.
+ Docker installé et configuré sur votre système.
+Partie 1: Introduction à Docker
+1.1 Qu'est-ce que Docker?
+Docker est une plateforme de virtualisation légère qui permet d'exécuter des
+applications dans des conteneurs isolés. Les conteneurs Docker sont autonomes et
+regroupent tout le nécessaire pour exécuter une application, y compris son code, ses
+dépendances, son système d'exploitation et ses configurations.
+1.2 Images Docker
+Une image Docker est un modèle réutilisable à partir duquel des conteneurs sont
+créés. Elle contient l'ensemble des instructions nécessaires pour configurer et exécuter
 2
-4. Dans le test, vérifiez que la méthode findUserById sur l'objet mock est appelée
-avec le bon argument lorsque UserService.getUserById est appelée.
-Exercice 2 : Interaction avec une Base de Données avec des Mocks
-Scénario :
-Une classe OrderController interagit avec un OrderService pour créer une
-commande. L'OrderService enregistre les détails de la commande dans une base de
-données à l'aide d'une classe OrderDao (Dao : Data access object).
-Tâches :
-1. Créer une classe OrderController avec une méthode createOrder(Order
-order) qui appelle OrderService.createOrder(order).
-2. Créer une classe OrderService avec une méthode createOrder(Order order)
-qui appelle OrderDao.saveOrder(order).
-3. Créer une interface OrderDao avec une méthode saveOrder(Order order).
-4. Écrire un test JUnit pour OrderController.createOrder(Order order). Utilisez
-des mocks pour OrderService et OrderDao .
-5. Dans le test, vérifiez que OrderService.createOrder est appelé avec le bon
-argument et que OrderDao.saveOrder est appelé avec l'objet de commande
-créé.
-Exercice 3 : Intégration d'API avec Mocking
-Scénario :
-Un ProductService récupère des informations sur un produit à partir d'une API externe
-à l'aide d'un ProductApiClient .
-Tâches :
-1. Créer une classe ProductService avec une méthode getProduct(String
-productId) qui récupère les détails du produit en appelant
-ProductApiClient.getProduct(productId ).
-2. Créer une interface ProductApiClient avec une méthode getProduct(String
-productId) qui simule un appel d'API (vous pouvez utiliser une réponse
-prédéfinie ou lever une exception).
-3. Écrire un test JUnit pour ProductService.getProduct(String productId) .
-Utilisez un objet mock pour ProductApiClient.
-4. Dans le test, vérifiez que ProductApiClient.getProduct est appelé avec le bon
-argument. Tester également ces différents scénarios : récupération réussie,
-format de donnée incompatible, échecs d'appel d'API.
+une application. Les images Docker peuvent être stockées localement sur votre
+machine ou dans des registres publics comme Docker Hub.
+1.3 Conteneurs Docker
+Un conteneur Docker est une instance exécutable d'une image Docker. Il s'agit d'un
+environnement isolé qui encapsule l'application et ses dépendances. Les conteneurs
+Docker sont légers, portables et peuvent être démarrés, arrêtés et déplacés facilement.
+1.4 Registres Docker
+Un registre Docker est un référentiel centralisé pour stocker et partager des images
+Docker. Le registre Docker public le plus connu est Docker Hub, mais il existe
+également des registres privés pour les organisations et les entreprises.
+1.5 Docker Compose
+Docker Compose est un outil permettant de définir et d'exécuter des applications
+multi-conteneurs. Il simplifie la gestion de plusieurs conteneurs interdépendants en
+regroupant les configurations dans un seul fichier YAML.
+Partie 2: Tests d'intégration Java avec Testcontainers
+2.1 Qu'est-ce que Testcontainers?
+Testcontainers est une bibliothèque Java open source qui facilite l'exécution de tests
+d'intégration dans des conteneurs Docker. Elle permet de démarrer et d'arrêter
+automatiquement des conteneurs pour les bases de données, les navigateurs web et
+autres services requis par des tests.
+2.2 Avantages de l'utilisation de Testcontainers
+L'utilisation de Testcontainers pour les tests d'intégration Java présente plusieurs
+avantages:
+ Environnement de test isolé: Chaque test s'exécute dans son propre conteneur,
+garantissant une isolation et une reproductibilité des tests.
+ Démarrage et arrêt automatiques des conteneurs: Testcontainers gère
+automatiquement le cycle de vie des conteneurs, simplifiant la configuration et
+l'exécution des tests.
+ Accès facile aux services requis: Testcontainers fournit des API simples pour
+interagir avec les services exécutés dans les conteneurs, tels que les bases de
+données et les navigateurs web.
+3
+2.3 Exemple de test d'intégration avec TestContainers
+Considérons une application web simple qui gère une liste de tâches. L'application
+utilise une base de données MySQL pour stocker les tâches. Nous allons écrire un test
+d'intégration pour vérifier que l'application peut créer, récupérer et supprimer des
+tâches.
+Prérequis
+ Avoir un projet Spring Boot avec une application web et une connexion à une
+base de données MySQL configurée.
+ Avoir Testcontainers installé dans votre projet.
+On commence par l'installation de Testcontainers dans le projet Java. Elle dépend de
+l'outil de build que vous utilisez. Voici les instructions pour les deux outils les plus
+courants :
+Installation avec Maven
+1. Ajoutez la dépendance Testcontainers à votre fichier pom.xml:
+<dependency>
+<groupId>org.testcontainers</groupId>
+<artifactId>testcontainers</artifactId>
+<version>latest.stable</version>
+<scope>test</scope>
+</dependency>
+2. Ajoutez la dépendance du driver de base de données que vous souhaitez
+utiliser avec Testcontainers (par exemple, pour MySQL):
+<dependency>
+<groupId>mysql</groupId>
+<artifactId>mysql-connector-java</artifactId>
+<version>8.0.30</version>
+<scope>test</scope>
+</dependency>
+Installation avec Gradle
+1. Ajoutez la dépendance Testcontainers à votre fichier build.gradle:
+testCompile 'org.testcontainers:testcontainers:latest.stable'
+testCompile 'mysql:mysql-connector-java:8.0.30'
+Après installation
+4
+Une fois que vous avez ajouté les dépendances nécessaires, vous pouvez commencer
+à utiliser Testcontainers dans vos classes de test JUnit. Référez-vous à la
+documentation officielle de Testcontainers pour plus d'informations sur son utilisation
+et les différents types de conteneurs disponibles : https://java.testcontainers.org/
+Étapes de test :
+1. Créer une classe de test: Créez une classe de test annotée avec
+@RunWith(Junit5.class). Cette classe contiendra vos tests d'intégration.
+@RunWith(JUnit5.class)
+public class TaskControllerIntegrationTest {
+// ...
+}
+2. Définir le conteneur MySQL avec Testcontainers: Utilisez Testcontainers pour
+démarrer un conteneur MySQL et le mapper à un port local.
+@Rule
+public KGenericContainer<MySqlContainer> mysql =
+KGenericContainer.dockerized(MySqlContainer.class)
+.withUsername("root")
+.withPassword("password")
+.withDatabaseName("testdb");
+3. Injecter les dépendances: Injectez les dépendances nécessaires dans votre
+classe de test, telles que le service de tâches et le port du conteneur MySQL.
+@Autowired
+private TaskService taskService;
+@TestPropertySource(properties = {
+"spring.datasource.url=jdbc:mysql://localhost:${test.container.mysql.firstM
+appedPort}/testdb",
+"spring.datasource.username=root",
+"spring.datasource.password=password"
+})
+4. Écrire les tests d'intégration: Créez des méthodes de test pour vérifier les
+différentes fonctionnalités de l'application web, telles que la création, la
+récupération et la suppression de tâches.
+@Test
+public void testCreateTask() {
+// Créer une nouvelle tâche
+Task task = new Task("Tâche 1", "Description de la tâche 1");
+// Enregistrer la tâche
+taskService.saveTask(task);
+// Vérifier que la tâche a été enregistrée dans la base de données
+Long taskId = task.getId();
+Optional<Task> retrievedTask = taskService.findTaskById(taskId);
+5
+assertTrue(retrievedTask.isPresent());
+assertEquals(task, retrievedTask.get());
+}
+@Test
+public void testGetTask() {
+// Créer une tâche et l'enregistrer dans la base de données
+Task task = createAndSaveTask();
+// Récupérer la tâche par son ID
+Long taskId = task.getId();
+Optional<Task> retrievedTask = taskService.findTaskById(taskId);
+assertTrue(retrievedTask.isPresent());
+assertEquals(task, retrievedTask.get());
+}
+@Test
+public void testDeleteTask() {
+// Créer une tâche et l'enregistrer dans la base de données
+Task task = createAndSaveTask();
+// Supprimer la tâche par son ID
+Long taskId = task.getId();
+taskService.deleteTaskById(taskId);
+// Vérifier que la tâche a été supprimée de la base de données
+Optional<Task> retrievedTask = taskService.findTaskById(taskId);
+assertFalse(retrievedTask.isPresent());
+}
+private Task createAndSaveTask() {
+// Créer une nouvelle tâche
+Task task = new Task("Tâche 1", "Description de la tâche 1");
+// Enregistrer la tâche
+taskService.saveTask(task);
+return task;
+}
+6
+Partie 3: Installation du Framework Spring Boot
+1. Suivre les étapes d’installation de Spring Boot depuis le site officiel:
+11. Installing Spring Boot
+2. Télécharger le fichier d’installation et décompressez le dans un répertoire de
+votre choix.
+3. Configurez la variable d'environnement JAVA_HOME pour pointer vers le
+répertoire d'installation de Java.
+4. Ajoutez le répertoire d'installation de Spring Boot au chemin d'accès système
+(PATH).
+5. Vérifiez l'installation en exécutant la commande spring dans votre terminal.
+Cela devrait afficher la version de Spring Boot installée et d'autres
+informations utiles.
+Exercice1 : Maitriser TestContainers
+En se basant sur vos implémentations réalisée dans la première partie de ce TP 03,
+pour chaque exercice, compiler les parties que vous jugez indépendantes (ex : au lieu
+de mocker une base de données on utilise son image Docker), puis publier les sur des
+images ou conteneurs Docker. Refaire les tests en utilisant la bibliothèque
+TestContainers. Pusher enfin vos codes sur vos compte GitHub.
+Exercice2 : Tests d'intégration avec Testcontainers Java pour une application
+de gestion de tâches
+Objectifs:
+ Cloner ou télécharger un projet d'application de gestion de tâches ce lien GitHub
+GitHub - rengreen/task-manager: Spring Boot application for task management.
+ Analyser les tests existants dans le projet.
+ Réécrire les tests d'intégration en utilisant la bibliothèque Testcontainers Java et
+Docker.
+ Exécuter les tests d'intégration réécrits et vérifier leur bon fonctionnement.
+Déroulement:
+1. Cloner ou télécharger le projet:
+o Choisissez un projet d'application de gestion de tâches Java disponible sur Github.
+o Clonez ou téléchargez le projet dans votre environnement de développement local.
+2. Analyser les tests existants:
+7
+o Identifiez les tests d'intégration existants dans le projet.
+o Quelle est (sont) l’(les) approche (s) utilisées pour les tests d'intégration.
+o Réfléchissez aux limitations des tests existants en termes de couverture et de fiabilité,
+donnez vos commentaires.
+3. Réécrire les tests d'intégration avec Testcontainers Java:
+o Remplacez les tests existants par des tests équivalents utilisant Testcontainers Java.
+o Profitez des fonctionnalités de Testcontainers Java pour démarrer et arrêter
+automatiquement les conteneurs Docker requis pour les tests.
+o Assurez-vous que les tests réécrits couvrent les mêmes scénarios que les tests
+existants. Si vous avez rajouter un nouveau scénario, mentionner le sur le fichier
+ReadMe.
+4. Exécuter les tests d'intégration réécrits:
+o Exécutez les tests d'intégration réécrits avec l'aide d'un outil de test JUnit.
+o Observez les résultats des tests et assurez-vous qu'ils passent tous avec succès.
+5. Analyse et comparaison:
+o Comparez les tests existants et les tests réécrits en termes de couverture, de lisibilité,
+de maintenabilité et de fiabilité.
+o Discutez des avantages et des inconvénients de l'utilisation de Testcontainers Java
+pour les tests d'intégration.
+Mettez vos réponses dans le fichier ReadMe.
