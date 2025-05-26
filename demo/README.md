@@ -164,7 +164,7 @@ La différence principale entre les deux approches (avec mock de la banque versu
 
 2. **Test avec implémentation réelle** :
    - Teste l'intégration entre le jeu et la banque
-   - Permet de vérifier l'état réel de la banque après les opérations
+   - Permet de vérifier l'état réel de la banque après les opérations 
    - Plus proche d'un scénario réel d'utilisation
 
 L'avantage du test avec mock est qu'il est plus ciblé et isolé, ce qui facilite l'identification des problèmes dans la classe Jeu spécifiquement. Le test avec implémentation réelle est plus complet mais introduit une dépendance à l'implémentation de la Banque, ce qui peut rendre le diagnostic plus complexe en cas d'échec du test.
